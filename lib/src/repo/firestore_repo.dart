@@ -15,7 +15,7 @@ final _firestore = FirebaseFirestore.instance;
 
 class FirestoreRepo<T> implements RemoteRepo {
   final FirebaseFirestore firestore = _firestore;
-  final Map<String, String>? paths;
+  Map<String, String>? paths;
 
   FirestoreRepo({
     this.paths,
@@ -48,6 +48,13 @@ class FirestoreRepo<T> implements RemoteRepo {
     }
 
     _collectionPath = firestore.collection('$_path$tableName');
+    return this;
+  }
+
+
+  @override
+  RemoteRepo ofPath(Map<String, String>? path) {
+    paths = path;
     return this;
   }
 
