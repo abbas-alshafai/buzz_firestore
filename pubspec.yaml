@@ -1,6 +1,6 @@
 name: buzz_firestore
 description: An Firestore implementation of Buzz Remote Repo
-version: 0.0.3
+version: 0.0.4
 homepage: https://github.com/abbas-alshafai/buzz_firestore
 
 environment:
@@ -11,10 +11,10 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cloud_firestore: ^3.1.12
-  cloud_functions: ^3.2.17
+  cloud_firestore: ^3.2.1
+  cloud_functions: ^3.3.1
 
-  buzz_repo: ^0.0.5
+  buzz_repo: ^0.0.6
   buzz_utils: ^0.0.3
   buzz_result: ^0.0.1
   buzz_logger: ^0.0.2
