@@ -1,6 +1,8 @@
+## 0.0.5
+* updated getAll method
+
 ## 0.0.4
 * updated dependency versions
-
 
 ## 0.0.3
 * enforce version

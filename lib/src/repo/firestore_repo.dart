@@ -24,15 +24,13 @@ class FirestoreRepo<T> implements RemoteRepo {
   FromJsonFunc? _fromJsonFunc;
   CollectionReference? _collectionPath;
 
-
   // TODO add pagination and order variables here so they would be available for all repos
 
   @override
   Future init() async {}
 
   @override
-  RemoteRepo ofTable(
-    String tableName, {
+  RemoteRepo ofTable(String tableName, {
     final bool? hasPrePath,
   }) {
     if (!(hasPrePath == true)) {
@@ -50,7 +48,6 @@ class FirestoreRepo<T> implements RemoteRepo {
     _collectionPath = firestore.collection('$_path$tableName');
     return this;
   }
-
 
   @override
   RemoteRepo ofPath(Map<String, String>? path) {
@@ -90,9 +87,9 @@ class FirestoreRepo<T> implements RemoteRepo {
       return StringUtils.instance.isNotBlank(result.id)
           ? Result.success(obj: result.id)
           : _getErrorLog(
-              stacktrace: StackTrace.current,
-              msg: 'Received an empty result when adding an object',
-            );
+        stacktrace: StackTrace.current,
+        msg: 'Received an empty result when adding an object',
+      );
     } catch (e, stacktrace) {
       return _getErrorLog(
         msg: e.toString(),
@@ -198,7 +195,7 @@ class FirestoreRepo<T> implements RemoteRepo {
       assert(fieldName != null);
 
       QuerySnapshot snapshot =
-          await _collectionPath!.where(fieldName, whereIn: list).get();
+      await _collectionPath!.where(fieldName, whereIn: list).get();
 
       return _toList<T>(snapshot);
     } catch (e, stacktrace) {
@@ -231,8 +228,8 @@ class FirestoreRepo<T> implements RemoteRepo {
     if (snapshot.docs.isEmpty) {
       return Result.success(
           log: Log.w(
-        msg: _buildMessage('No records have been found'),
-      ));
+            msg: _buildMessage('No records have been found'),
+          ));
     }
 
     final List<T?> list = snapshot.docs.map((e) {
@@ -266,7 +263,7 @@ class FirestoreRepo<T> implements RemoteRepo {
 
     if (ListUtils.instance.isEmpty(snapshot.docs)) {
       String msg =
-          _buildMessage('The received snapshot or its documents is null');
+      _buildMessage('The received snapshot or its documents is null');
       Logger.log(log: Log.w(msg: msg));
       return Result.success(obj: dtoList, log: Log.w(msg: msg));
     }
@@ -297,17 +294,17 @@ class FirestoreRepo<T> implements RemoteRepo {
 
     return dtoList.isEmpty
         ? Result.success(
-            obj: [],
-            log: Log.w(
-              msg: _buildMessage('No records have been found'),
-            ),
-          )
+      obj: [],
+      log: Log.w(
+        msg: _buildMessage('No records have been found'),
+      ),
+    )
         : Result.success(obj: dtoList, alt: snapshot.docs.last);
   }
 
   Stream<QuerySnapshot> stream(CollectionReference ref) {
     return ref
-        // .limit(limit) // TODO
+    // .limit(limit) // TODO
         .snapshots();
   }
 
@@ -328,9 +325,9 @@ class FirestoreRepo<T> implements RemoteRepo {
     } catch (e, stacktrace) {
       return Result.error(
           log: Log(
-        msg: e.toString(),
-        stacktrace: stacktrace,
-      ));
+            msg: e.toString(),
+            stacktrace: stacktrace,
+          ));
     }
   }
 
@@ -345,14 +342,15 @@ class FirestoreRepo<T> implements RemoteRepo {
     return this;
   }
 
+
   @override
   Future<Result<List<T>>> getAll<T>({
     int? limit,
     String? orderByField,
     bool descending = false,
     Object? field,
-    Map<String, String>? isEqualTo,
-    Object? isNotEqualTo,
+    bool? isEqualTo,
+    bool? isNotEqualTo,
     Object? isLessThan,
     Object? isLessThanOrEqualTo,
     Object? isGreaterThan,
@@ -373,7 +371,7 @@ class FirestoreRepo<T> implements RemoteRepo {
         _query = _query.where(field,
             whereIn: whereIn,
             arrayContains: arrayContains,
-            // isEqualTo: isEqualTo,
+            isEqualTo: isEqualTo,
             isLessThan: isLessThan,
             isLessThanOrEqualTo: isLessThanOrEqualTo,
             arrayContainsAny: arrayContainsAny,
@@ -385,11 +383,8 @@ class FirestoreRepo<T> implements RemoteRepo {
       if (limit != null) {
         _query = _query.limit(limit);
       }
-      if (isEqualTo != null) {
-        for (final key in isEqualTo.keys) {
-          _query = _query.where(key, isEqualTo: isEqualTo[key]);
-        }
-      }
+
+
       // if (startAfterDoc != null) {
       //   _query = _query.startAfterDocument(startAfterDoc);
       // }
@@ -403,4 +398,5 @@ class FirestoreRepo<T> implements RemoteRepo {
       );
     }
   }
+
 }
